@@ -9,7 +9,7 @@ public class MApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        if (LeakCanary.isInAnalyzerProcess(this)) {
+        if (LeakCanary.isInAnalyzerProcess(getApplicationContext())) {
             // This process is dedicated to LeakCanary for heap analysis.
             // You should not init your app in this process.
             return;

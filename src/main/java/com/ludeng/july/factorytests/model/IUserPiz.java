@@ -5,6 +5,10 @@ public interface IUserPiz{
     interface task<T> extends MBasePresenter{
         T getTaskName();
         void setTaskName(T var);
+
+        void taskFinished(boolean success);
+
+        void onDestroy();
     }
 
 }

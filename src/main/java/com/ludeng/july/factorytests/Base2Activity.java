@@ -24,12 +24,6 @@ public class Base2Activity extends AppCompatActivity implements MiContract.View{
 
     }
 
-
-    @Override
-    public void showLoading() {
-
-    }
-
     @Override
     public void refreshUI(Pig mPig) {
 
@@ -42,7 +36,8 @@ public class Base2Activity extends AppCompatActivity implements MiContract.View{
 
     @Override
     public void stopFactoryTask() {
-        mPresenter.onStopTask();
+
     }
+
 
 }

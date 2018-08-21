@@ -5,20 +5,16 @@ import com.ludeng.july.factorytests.view.BaseView;
 
 public interface MiContract {
     interface Presenter extends BasePresenter {
-        //获取数据
-        void getData(int userId);
-        //检查数据是否有效
-        void checkData();
 
         void isDone(Pig pig);
 
-        void onStopTask();
+        void onStopTask(Pig pig);
+
+        void onDestroy();
 
     }
 
     interface View extends BaseView<Presenter> {
-        //显示加载中
-        void showLoading();
         //刷新界面
         void refreshUI(Pig mPig);
         //显示错误界面

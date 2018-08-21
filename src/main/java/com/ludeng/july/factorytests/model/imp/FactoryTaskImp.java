@@ -12,33 +12,41 @@ import java.lang.ref.WeakReference;
 
 public class FactoryTaskImp<T> implements IUserPiz.task<T> {
 
-    private static final String TAG = FactoryTaskImp.class.getName();
+    private static final String TAG = "chenguang";
 
     private T mVar;
-    private boolean isCancel;
+    private boolean isTaskStart = false;
     private WeakReference<MiContract.Presenter> weakReference;
-    MiContract.Presenter mPresenter;
+    private MiContract.Presenter mPresenter;
+    private MRunnable<T> mRunnable;
+    private Pig taskPig;
 
 
 
     public FactoryTaskImp(MiContract.Presenter mPresenter, T mVar) {
 
         this.weakReference = new WeakReference<>(mPresenter);
-        mPresenter = (MiContract.Presenter) weakReference.get();
+
         this.mVar = mVar;
-        this.isCancel = false;
     }
 
     @Override
-    public void start(Pig user) {
-        MyRunnable runnable =  new MyRunnable<T>(this,mVar);
+    public void start(Pig pig) {
 
+        if (isTaskStart) {
+            return;
+        }
+        taskPig = pig;
+        Log.i(TAG, "FactoryTaskImp class start is Tid"+ Thread.currentThread().getId());
+        mRunnable = new MRunnable<T>(FactoryTaskImp.this,mVar);
+        mRunnable.setOnLinstenner(this);
+        mRunnable.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        isTaskStart = true;
     }
 
     @Override
-    public void stop(Pig user) {
-
-
+    public void stop(Pig mPig) {
+        mRunnable.cancel(true);
     }
 
 
@@ -47,69 +55,36 @@ public class FactoryTaskImp<T> implements IUserPiz.task<T> {
         return this.mVar;
     }
 
+
+
     @Override
     public void setTaskName(T var) {
         this.mVar = var;
-
     }
 
 
 
-    private synchronized void doSomeThing(T var) {
-        if (mPresenter == null) {
+    @Override
+    public void taskFinished(boolean isStop) {
+        Log.i(TAG, "FactoryTaskImp class finished is Tid"+ Thread.currentThread().getId());
+        mRunnable.setOnLinstenner(null);
 
-            mPresenter = weakReference.get();
+        isTaskStart = false;
+
+        if (weakReference == null) {
+            Log.i(TAG, "FactoryTaskImp weakReference is null");
+            return;
         }
 
-
-        if (mVar.toString().equals("1")) {
-
-        }
-        //timeout
-        Log.i(TAG, "the class is hh");
-        mPresenter.onStopTask();
-
-
-        SystemClock.sleep(3000);
-        mPresenter.isDone(new Pig());
+        mPresenter = weakReference.get();
+        taskPig.setModelTaskStop(true);
+        mPresenter.isDone(taskPig);
     }
 
-
-    static class MyRunnable<T> extends AsyncTask {
-        private WeakReference<FactoryTaskImp> weakReference;
-        private T var;
-
-        public MyRunnable(FactoryTaskImp weakReference, T var) {
-            this.weakReference = new WeakReference<>(weakReference);
-            this.var = var;
-
-        }
-
-
-        @Override
-        protected Object doInBackground(Object[] objects) {
-
-            FactoryTaskImp view = (FactoryTaskImp) weakReference.get();
-            if (view == null) {
-                return null;
-            }
-
-            Log.i(TAG, "the class is dddddddddddddd");
-
-            if (isCancelled() || view.isCancel) {
-                Log.i(TAG, "the class is cc");
-                return null;
-            }
-
-            if (!view.isCancel) {
-                view.doSomeThing(this.var);
-            }
-            return null;
-        }
-
-
-
+    @Override
+    public void onDestroy() {
+        mRunnable = null;
+        mPresenter = null;
     }
-
 
 }
