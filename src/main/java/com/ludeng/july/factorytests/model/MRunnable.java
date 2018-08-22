@@ -5,6 +5,7 @@ import android.os.SystemClock;
 import android.util.Log;
 
 import com.ludeng.july.factorytests.model.imp.FactoryTaskImp;
+import com.ludeng.july.factorytests.model.task.BaseAsyncTask;
 import com.ludeng.july.factorytests.model.task.Flashlight;
 
 import java.lang.ref.WeakReference;
@@ -23,9 +24,9 @@ public class MRunnable extends AsyncTask {
 
     private IUserPiz.task onLinstenner;
 
-    public MRunnable() {
+    private BaseAsyncTask curretAsync;
 
-    }
+
 
     public MRunnable(FactoryTaskImp weakReference) {
         this.weakReference = new WeakReference<>(weakReference);
@@ -37,15 +38,14 @@ public class MRunnable extends AsyncTask {
     protected Object doInBackground(Object[] objects) {
 
         Log.i(TAG, "MRunnable class doInBackground is Tid"+ Thread.currentThread().getId());
+        if (weakReference.get() != null) {
+            FactoryTaskImp view = weakReference.get();
 
-        FactoryTaskImp view = weakReference.get();
-        if (view == null) {
-            return null;
+            while (!isCancelled()) {
+                doSomeThing(view.getTaskPig());
+            }
         }
 
-        while (!isCancelled()) {
-            doSomeThing(view.getTaskPig());
-        }
 
         return null;
     }
@@ -53,8 +53,6 @@ public class MRunnable extends AsyncTask {
     @Override
     protected void onCancelled() {
         super.onCancelled();
-
-        Log.i(TAG, "MRunnable class onCancelled is Tid"+ Thread.currentThread().getId());
 
         //todo
         onLinstenner.taskFinished(false);
@@ -65,13 +63,18 @@ public class MRunnable extends AsyncTask {
 
         switch (taskPig.getGroupID()) {
             case 0:
-               /* Flashlight flashlight = new Flashlight();
-                flashlight.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);*/
+                Flashlight flashlight = new Flashlight(0);
+                flashlight.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 break;
 
             case 1:
-                break;
+                Flashlight flashlight1 = new Flashlight(1);
+                flashlight1.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+               break;
+
             case 2:
+                Flashlight flashlight2 = new Flashlight(2);
+                flashlight2.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 break;
         }
         SystemClock.sleep(3000);

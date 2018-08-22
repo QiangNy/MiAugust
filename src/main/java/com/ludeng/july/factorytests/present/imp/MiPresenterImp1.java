@@ -39,7 +39,7 @@ public class MiPresenterImp1 implements MiContract.Presenter {
         this.mPig = pig;
 
         //judge is timeout
-        if (weakReference != null) {
+        if (weakReference.get() != null) {
             mView = (Task1Activity) weakReference.get();
             mView.isTimeOut();
         }
@@ -47,8 +47,10 @@ public class MiPresenterImp1 implements MiContract.Presenter {
 
     @Override
     public void onStopTask(Pig mPig) {
-        if (mModel != null && !this.mPig.isModelTaskStop())
+        if (mModel != null && !this.mPig.isModelTaskStop()) {
+            DswLog.i(TAG, "onStopTask");
             mModel.stop(mPig);
+        }
     }
 
     @Override
@@ -67,9 +69,11 @@ public class MiPresenterImp1 implements MiContract.Presenter {
             DswLog.i(TAG, "time is out,finishi the task");
 
             //refresh UI
-            Task1Activity mView = (Task1Activity) weakReference.get();
-            mView.refreshUI(this.mPig);
-            //todo
+            if(weakReference.get() != null) {
+                Task1Activity mView = (Task1Activity) weakReference.get();
+                mView.refreshUI(this.mPig);
+                //todo
+            }
         }else {
             //choose next group
             startGroup(this.mPig.getnextGroupID());
@@ -114,7 +118,7 @@ public class MiPresenterImp1 implements MiContract.Presenter {
 
         @Override
         public void run() {
-            if ( weakReference!=null ) {
+            if ( weakReference.get() != null ) {
                 mContext = weakReference.get();
             }
 

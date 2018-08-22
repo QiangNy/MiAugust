@@ -1,9 +1,12 @@
 package com.ludeng.july.factorytests.model.imp;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 
 import com.ludeng.july.factorytests.Utils.DswLog;
+import com.ludeng.july.factorytests.Utils.Singleton;
+import com.ludeng.july.factorytests.Utils.ToolsUtil;
 import com.ludeng.july.factorytests.model.IUserPiz;
 import com.ludeng.july.factorytests.model.MRunnable;
 import com.ludeng.july.factorytests.model.Pig;
@@ -43,7 +46,7 @@ public class FactoryTaskImp<T> implements IUserPiz.task<T> {
             return;
         }
         taskPig = pig;
-        Log.i(TAG, "FactoryTaskImp class start is Tid"+ Thread.currentThread().getId());
+        DswLog.i(TAG, "FactoryTaskImp class start is Tid"+ Thread.currentThread().getId());
         mRunnable = new MRunnable(FactoryTaskImp.this);
         mRunnable.setOnLinstenner(this);
         mRunnable.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -54,6 +57,9 @@ public class FactoryTaskImp<T> implements IUserPiz.task<T> {
     public void stop(Pig mPig) {
         if (mRunnable != null)
             mRunnable.cancel(true);
+
+        DswLog.i(TAG,"sendbroad OLDTEST_ACTION_STOPITEM");
+        Singleton.getInstance().getmContext().sendBroadcast(new Intent(ToolsUtil.OLDTEST_ACTION_STOPITEM));
     }
 
 
@@ -78,14 +84,12 @@ public class FactoryTaskImp<T> implements IUserPiz.task<T> {
 
         isTaskStart = false;
 
-        if (weakReference == null) {
-            Log.i(TAG, "FactoryTaskImp weakReference is null");
-            return;
+        if (weakReference.get() != null) {
+            mPresenter = weakReference.get();
+            taskPig.setModelTaskStop(true);
+            mPresenter.isDone(taskPig);
         }
 
-        mPresenter = weakReference.get();
-        taskPig.setModelTaskStop(true);
-        mPresenter.isDone(taskPig);
     }
 
     @Override

@@ -11,4 +11,9 @@ public interface IUserPiz{
         void onDestroy();
     }
 
+    interface taskListenner{
+        void onPause();
+        void onResume();
+    }
+
 }

@@ -29,13 +29,15 @@ public class Mi2BroadCast extends BroadcastReceiver {
         }
 
         if (action.equals(ToolsUtil.OLDTEST_ACTION_FINISHED)) {
-            clearTaskCache(context,action);
+            onCallBack(context,action);
+        }else if (action.equals(ToolsUtil.OLDTEST_ACTION_STOPITEM)) {
+            onCallBack(context,action);
         }
     }
 
-    private void clearTaskCache(Context mContext,String action) {
-        DswLog.i(TAG,"clearTaskCache");
-        if (weakReference != null) {
+    private void onCallBack(Context mContext,String action) {
+        DswLog.i(TAG,"onCallBack "+action);
+        if (weakReference.get() != null) {
             weakReference.get().onRecieve(action);
         }
     }

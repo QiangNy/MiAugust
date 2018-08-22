@@ -8,6 +8,7 @@ import android.widget.Button;
 
 import com.ludeng.july.R;
 import com.ludeng.july.factorytests.Utils.SPreference;
+import com.ludeng.july.factorytests.Utils.Singleton;
 import com.ludeng.july.factorytests.Utils.ToolsUtil;
 import com.ludeng.july.factorytests.broadcast.Mi2BroadCast;
 import com.ludeng.july.factorytests.model.Pig;
@@ -29,6 +30,7 @@ public class Task1Activity extends Base2Activity implements MiContract.View, MiC
 
         runBtn= (Button) findViewById(R.id.runBtn);
         stopBtn= (Button) findViewById(R.id.stopBtn);
+        Singleton.getInstance().setmContext(getApplicationContext());
 
         runBtn.setOnClickListener(new View.OnClickListener() {
             @Override
