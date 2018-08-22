@@ -1,10 +1,11 @@
 package com.ludeng.july.factorytests.model.imp;
 
 import android.os.AsyncTask;
-import android.os.SystemClock;
 import android.util.Log;
 
+import com.ludeng.july.factorytests.Utils.DswLog;
 import com.ludeng.july.factorytests.model.IUserPiz;
+import com.ludeng.july.factorytests.model.MRunnable;
 import com.ludeng.july.factorytests.model.Pig;
 import com.ludeng.july.factorytests.present.MiContract;
 
@@ -18,7 +19,12 @@ public class FactoryTaskImp<T> implements IUserPiz.task<T> {
     private boolean isTaskStart = false;
     private WeakReference<MiContract.Presenter> weakReference;
     private MiContract.Presenter mPresenter;
-    private MRunnable<T> mRunnable;
+    private MRunnable mRunnable;
+
+    public Pig getTaskPig() {
+        return taskPig;
+    }
+
     private Pig taskPig;
 
 
@@ -38,7 +44,7 @@ public class FactoryTaskImp<T> implements IUserPiz.task<T> {
         }
         taskPig = pig;
         Log.i(TAG, "FactoryTaskImp class start is Tid"+ Thread.currentThread().getId());
-        mRunnable = new MRunnable<T>(FactoryTaskImp.this,mVar);
+        mRunnable = new MRunnable(FactoryTaskImp.this);
         mRunnable.setOnLinstenner(this);
         mRunnable.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         isTaskStart = true;
@@ -46,7 +52,8 @@ public class FactoryTaskImp<T> implements IUserPiz.task<T> {
 
     @Override
     public void stop(Pig mPig) {
-        mRunnable.cancel(true);
+        if (mRunnable != null)
+            mRunnable.cancel(true);
     }
 
 
@@ -85,6 +92,8 @@ public class FactoryTaskImp<T> implements IUserPiz.task<T> {
     public void onDestroy() {
         mRunnable = null;
         mPresenter = null;
+        weakReference = null;
+        DswLog.i(TAG,"model clear");
     }
 
 }

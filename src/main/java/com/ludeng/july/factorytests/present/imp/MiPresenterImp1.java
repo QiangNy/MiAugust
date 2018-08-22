@@ -1,14 +1,13 @@
 package com.ludeng.july.factorytests.present.imp;
 
-import android.os.AsyncTask;
 import android.os.SystemClock;
 import android.util.Log;
 
 import com.ludeng.july.factorytests.Task1Activity;
+import com.ludeng.july.factorytests.Utils.DswLog;
 import com.ludeng.july.factorytests.model.Pig;
 import com.ludeng.july.factorytests.model.imp.FactoryTaskImp;
 
-import com.ludeng.july.factorytests.model.imp.MRunnable;
 import com.ludeng.july.factorytests.present.MiContract;
 
 import java.lang.ref.WeakReference;
@@ -20,7 +19,7 @@ public class MiPresenterImp1 implements MiContract.Presenter {
     private FactoryTaskImp mModel;
     private WeakReference<MiContract.View> weakReference;
     private final String TAG = "chenguang";
-   // private Task1Activity mView;
+    private Task1Activity mView;
     private Timer mTimer;
 
     private Pig mPig;
@@ -37,22 +36,18 @@ public class MiPresenterImp1 implements MiContract.Presenter {
     public void isDone(Pig pig) {
         Log.i(TAG, "MiPresenterImp1 class is Tid"+ Thread.currentThread().getId());
 
-        //timeout
-        if (pig.isTimeTaskStop()) {
-            Log.i(TAG, "MiPresenterImp1 pig.isModelTaskStop true");
-        }else {
-            //choose next group
-            startGroup(pig.getnextGroupID());
-        }
+        this.mPig = pig;
 
-        //refresh UI
-        Task1Activity mView = (Task1Activity) weakReference.get();
-        mView.refreshUI(pig);
+        //judge is timeout
+        if (weakReference != null) {
+            mView = (Task1Activity) weakReference.get();
+            mView.isTimeOut();
+        }
     }
 
     @Override
     public void onStopTask(Pig mPig) {
-        if (mModel != null)
+        if (mModel != null && !this.mPig.isModelTaskStop())
             mModel.stop(mPig);
     }
 
@@ -63,14 +58,32 @@ public class MiPresenterImp1 implements MiContract.Presenter {
         stopTimer();
     }
 
+    @Override
+    public void onTimeOut(boolean isTimeOut) {
+
+        //timeout
+        if (isTimeOut) {
+            mPig.setTimeTaskStop(true);
+            DswLog.i(TAG, "time is out,finishi the task");
+
+            //refresh UI
+            Task1Activity mView = (Task1Activity) weakReference.get();
+            mView.refreshUI(this.mPig);
+            //todo
+        }else {
+            //choose next group
+            startGroup(this.mPig.getnextGroupID());
+        }
+    }
+
 
     @Override
     public void startGroup(final int group) {
 
-
+        DswLog.i(TAG,"startGroup="+group);
 
         mPig.setGroupID(group);
-
+        mPig.setModelTaskStop(false);
         mModel.start(mPig);
 
         // 初始化定时器
@@ -99,7 +112,6 @@ public class MiPresenterImp1 implements MiContract.Presenter {
             this.weakReference = new WeakReference<>(weakReference);
         }
 
-
         @Override
         public void run() {
             if ( weakReference!=null ) {
@@ -109,18 +121,13 @@ public class MiPresenterImp1 implements MiContract.Presenter {
             while (!mContext.mPig.isTimeTaskStop()) {
                 Log.i(mContext.TAG, "TimerTask class is Tid"+ Thread.currentThread().getId());
 
-                SystemClock.sleep(10000);
+                SystemClock.sleep(6000);
 
                 mContext.onStopTask(mContext.mPig);
             }
 
             //if timeout the broadcast is coming
             //refresh UI
-            if (mContext.weakReference != null) {
-                Task1Activity mView = (Task1Activity) mContext.weakReference.get();
-                mView.refreshUI(mContext.mPig);
-            }
-
         }
     }
 }

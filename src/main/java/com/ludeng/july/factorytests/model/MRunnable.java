@@ -1,21 +1,21 @@
-package com.ludeng.july.factorytests.model.imp;
+package com.ludeng.july.factorytests.model;
 
 import android.os.AsyncTask;
 import android.os.SystemClock;
 import android.util.Log;
 
-import com.ludeng.july.factorytests.model.IUserPiz;
-import com.ludeng.july.factorytests.model.Pig;
+import com.ludeng.july.factorytests.model.imp.FactoryTaskImp;
+import com.ludeng.july.factorytests.model.task.Flashlight;
 
 import java.lang.ref.WeakReference;
 
-public class MRunnable<T> extends AsyncTask {
+public class MRunnable extends AsyncTask {
 
 
 
     private WeakReference<FactoryTaskImp> weakReference;
-    private T var;
-    private final String TAG = "chenguang";
+
+    public String TAG = "MRunnable";
 
     public void setOnLinstenner(IUserPiz.task onLinstenner) {
         this.onLinstenner = onLinstenner;
@@ -23,11 +23,12 @@ public class MRunnable<T> extends AsyncTask {
 
     private IUserPiz.task onLinstenner;
 
+    public MRunnable() {
 
-    public MRunnable(FactoryTaskImp weakReference, T var) {
+    }
+
+    public MRunnable(FactoryTaskImp weakReference) {
         this.weakReference = new WeakReference<>(weakReference);
-        this.var = var;
-
 
     }
 
@@ -37,15 +38,15 @@ public class MRunnable<T> extends AsyncTask {
 
         Log.i(TAG, "MRunnable class doInBackground is Tid"+ Thread.currentThread().getId());
 
-        FactoryTaskImp view = (FactoryTaskImp) weakReference.get();
+        FactoryTaskImp view = weakReference.get();
         if (view == null) {
             return null;
         }
 
-        Log.i(TAG, "the class is dddddddddddddd");
+        while (!isCancelled()) {
+            doSomeThing(view.getTaskPig());
+        }
 
-
-        doSomeThing(this.var);
         return null;
     }
 
@@ -55,22 +56,27 @@ public class MRunnable<T> extends AsyncTask {
 
         Log.i(TAG, "MRunnable class onCancelled is Tid"+ Thread.currentThread().getId());
 
-        //if factorytest time out broadcast coming
-        // onLinstenner.taskFinished(true);
         //todo
         onLinstenner.taskFinished(false);
     }
 
 
-    private synchronized void doSomeThing(T var) {
+    private synchronized void doSomeThing(Pig taskPig) {
 
+        switch (taskPig.getGroupID()) {
+            case 0:
+               /* Flashlight flashlight = new Flashlight();
+                flashlight.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);*/
+                break;
 
-        while (!isCancelled()) {
-
-            SystemClock.sleep(2000);
-
-            Log.i(TAG, "the class is hh");
+            case 1:
+                break;
+            case 2:
+                break;
         }
+        SystemClock.sleep(3000);
+        Log.i(TAG, "the class is hh");
+
 
       /*  if (mVar.toString().equals("1")) {
 

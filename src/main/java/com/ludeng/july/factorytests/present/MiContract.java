@@ -12,6 +12,8 @@ public interface MiContract {
 
         void onDestroy();
 
+        void onTimeOut(boolean isTimeOut);
+
     }
 
     interface View extends BaseView<Presenter> {
@@ -21,6 +23,12 @@ public interface MiContract {
         void showError();
 
         void stopFactoryTask();
+
+        void isTimeOut();
+    }
+
+    interface RecieveListen {
+        void onRecieve(String action);
     }
 
 }

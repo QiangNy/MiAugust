@@ -13,7 +13,7 @@ import com.ludeng.july.factorytests.present.BasePresenter;
 import com.ludeng.july.factorytests.present.MiContract;
 import com.ludeng.july.factorytests.view.BaseView;
 
-public class Base2Activity extends AppCompatActivity implements MiContract.View{
+public class Base2Activity extends AppCompatActivity{
 
     protected MiContract.Presenter mPresenter;
 
@@ -21,21 +21,6 @@ public class Base2Activity extends AppCompatActivity implements MiContract.View{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
-
-    }
-
-    @Override
-    public void refreshUI(Pig mPig) {
-
-    }
-
-    @Override
-    public void showError() {
-
-    }
-
-    @Override
-    public void stopFactoryTask() {
 
     }
 
