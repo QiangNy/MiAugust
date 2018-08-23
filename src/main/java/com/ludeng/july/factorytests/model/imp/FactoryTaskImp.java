@@ -9,6 +9,7 @@ import com.ludeng.july.factorytests.Utils.ToolsUtil;
 import com.ludeng.july.factorytests.model.IUserPiz;
 import com.ludeng.july.factorytests.model.MRunnable;
 import com.ludeng.july.factorytests.model.Pig;
+import com.ludeng.july.factorytests.model.task.DBAsyncTask;
 import com.ludeng.july.factorytests.present.MiContract;
 
 import java.lang.ref.WeakReference;
@@ -50,6 +51,10 @@ public class FactoryTaskImp<T> implements IUserPiz.task<T> {
         mRunnable.setOnLinstenner(this);
         mRunnable.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         isTaskStart = true;
+
+        final DBAsyncTask dbAsyncTask = new DBAsyncTask();
+        dbAsyncTask.execute(AsyncTask.THREAD_POOL_EXECUTOR);
+
     }
 
     @Override

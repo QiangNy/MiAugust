@@ -1,23 +1,12 @@
 package com.ludeng.july.factorytests.model.dbdata;
 
-import static com.cydroid.os.autooldtest.model.Constant.COLUMN_NAME_TESTTIME;
-import static com.cydroid.os.autooldtest.model.Constant.COLUMN_NAME_ENDTIME;
-import static com.cydroid.os.autooldtest.model.Constant.COLUMN_NAME_ISTESTDONE;
-import static com.cydroid.os.autooldtest.model.Constant.COLUMN_NAME_DURATION;
-import static com.cydroid.os.autooldtest.model.Constant.ORDER_BY;
-import static com.cydroid.os.autooldtest.model.Constant.RESULT_TABLE_NAME;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import com.cydroid.os.autooldtest.model.Constant;
-import com.cydroid.os.autooldtest.model.OldTestIssue;
-import com.cydroid.os.autooldtest.model.OldTestResult;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DbOldTestResultHelper extends DbDatabaseHelper {
 
@@ -29,17 +18,17 @@ public class DbOldTestResultHelper extends DbDatabaseHelper {
 	/**
 	 * 插入一条新的issue数据
 	 * 
-	 * @param permissionModel
+	 * @param result
 	 * @return
 	 */
 	public long insertAllowResult(OldTestResult result) {
 		Log.i(TAG, "DatabaseHelper insertresult----"+result.getIsTestDone());
 		ContentValues cv = new ContentValues();
-		cv.put(COLUMN_NAME_TESTTIME, result.getTestTimeString());
-		cv.put(COLUMN_NAME_ENDTIME, result.getEndtimeString());
-		cv.put(COLUMN_NAME_ISTESTDONE, result.getIsTestDone());
-		cv.put(COLUMN_NAME_DURATION, result.getDurationTimeString());
-		long row = mDb.insert(RESULT_TABLE_NAME, null, cv);
+		cv.put(Constant.COLUMN_NAME_TESTTIME, result.getTestTimeString());
+		cv.put(Constant.COLUMN_NAME_ENDTIME, result.getEndtimeString());
+		cv.put(Constant.COLUMN_NAME_ISTESTDONE, result.getIsTestDone());
+		cv.put(Constant.COLUMN_NAME_DURATION, result.getDurationTimeString());
+		long row = mDb.insert(Constant.RESULT_TABLE_NAME, null, cv);
 		Log.i(TAG, "row=" + row);
 		return row;
 	}
@@ -48,14 +37,14 @@ public class DbOldTestResultHelper extends DbDatabaseHelper {
 	 * 删除特定的result记录
 	 * 
 	 * @param time
-	 * @param scene
+	 * @param time
 	 * @return
 	 */
 	public boolean deleteAllowResultByTime(String time) {
 		Log.i(TAG, "TPDatabaseHelper deletetpException");
-		String where = COLUMN_NAME_TESTTIME + "= ?";
+		String where = Constant.COLUMN_NAME_TESTTIME + "= ?";
 		String[] whereValue = new String[] { time };
-		return mDb.delete(RESULT_TABLE_NAME, where, whereValue) > 0;
+		return mDb.delete(Constant.RESULT_TABLE_NAME, where, whereValue) > 0;
 	}
 
 	/**
@@ -73,25 +62,25 @@ public class DbOldTestResultHelper extends DbDatabaseHelper {
 	 */
 	public List<OldTestResult> queryOldtestResultBytesttime(String starttestTime) {
 		Log.i("aiyong", "query oldtestexceptions by test time");
-		String where = COLUMN_NAME_TESTTIME + "= ?";
+		String where = Constant.COLUMN_NAME_TESTTIME + "= ?";
 		String[] whereValue = new String[] { starttestTime };
 		Cursor query = null;
 		List<OldTestResult> OldTestResultList = null;
 		try {
-			query = mDb.query(RESULT_TABLE_NAME, null, where, whereValue,
-					null, null, ORDER_BY);
+			query = mDb.query(Constant.RESULT_TABLE_NAME, null, where, whereValue,
+					null, null, Constant.ORDER_BY);
 			if (query != null && query.getCount() > 0) {
 				Log.i(TAG, "query oldtestexceptions by test time is not null");
 				OldTestResultList = new ArrayList<OldTestResult>();
 				while (query.moveToNext()) {
 					String testtime = query.getString(query
-							.getColumnIndex(COLUMN_NAME_TESTTIME));
+							.getColumnIndex(Constant.COLUMN_NAME_TESTTIME));
 					String endtime = query.getString(query
-							.getColumnIndex(COLUMN_NAME_ENDTIME));
+							.getColumnIndex(Constant.COLUMN_NAME_ENDTIME));
 					String isdone = query.getString(query
-							.getColumnIndex(COLUMN_NAME_ISTESTDONE));
+							.getColumnIndex(Constant.COLUMN_NAME_ISTESTDONE));
 					String time_ = query.getString(query
-							.getColumnIndex(COLUMN_NAME_DURATION));
+							.getColumnIndex(Constant.COLUMN_NAME_DURATION));
 					Log.i(TAG, "query result db testtime="+testtime+" endtime="+endtime+" isdone="+isdone+" time_="+time_);
 					OldTestResult mResult = new OldTestResult();
 					mResult.setTestTimeString(testtime);
@@ -124,20 +113,20 @@ public class DbOldTestResultHelper extends DbDatabaseHelper {
 		Cursor query = null;
 		List<OldTestResult> mResultList = null;
 		try {
-			query = mDb.query(RESULT_TABLE_NAME, null, null, null, null,
-					null, ORDER_BY);
+			query = mDb.query(Constant.RESULT_TABLE_NAME, null, null, null, null,
+					null, Constant.ORDER_BY);
 			if (query != null && query.getCount() > 0) {
 				Log.i(TAG, "AllowPermDatabaseHelper queryAllAllowIssue is not null");
 				mResultList = new ArrayList<OldTestResult>();
 				while (query.moveToNext()) {
 					String starttime_ = query.getString(query
-							.getColumnIndex(COLUMN_NAME_TESTTIME));
+							.getColumnIndex(Constant.COLUMN_NAME_TESTTIME));
 					String endtime = query.getString(query
-							.getColumnIndex(COLUMN_NAME_ENDTIME));
+							.getColumnIndex(Constant.COLUMN_NAME_ENDTIME));
 					String isdone = query.getString(query
-							.getColumnIndex(COLUMN_NAME_ISTESTDONE));
+							.getColumnIndex(Constant.COLUMN_NAME_ISTESTDONE));
 					String time_ = query.getString(query
-							.getColumnIndex(COLUMN_NAME_DURATION));
+							.getColumnIndex(Constant.COLUMN_NAME_DURATION));
 
 					OldTestResult mResult = new OldTestResult();
 					mResult.setTestTimeString(starttime_);

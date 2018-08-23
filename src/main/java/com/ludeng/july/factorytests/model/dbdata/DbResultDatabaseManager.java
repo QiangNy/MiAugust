@@ -1,13 +1,11 @@
 package com.ludeng.july.factorytests.model.dbdata;
 
+import android.content.Context;
+
+import com.ludeng.july.factorytests.Utils.DswLog;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import android.content.Context;
-import android.util.Log;
-
-import com.cydroid.os.autooldtest.model.OldTestResult;
-import com.cydroid.os.autooldtest.util.Util;
 
 public class DbResultDatabaseManager {
 	static String TAG = "DbResultDatabaseManager";
@@ -20,7 +18,7 @@ public class DbResultDatabaseManager {
 
 	private static void createDataBase(Context context) {
 		if (sResultHelper == null) {
-		    Util.log(Util.TAG, TAG + " createDataBase");
+		    DswLog.i(TAG, TAG + " createDataBase");
 			sResultHelper = new DbOldTestResultHelper(context);
 		}
 	}
@@ -28,12 +26,12 @@ public class DbResultDatabaseManager {
 	/**
 	 * 插入一条新的result记录到数据库
 	 * 
-	 * @param tp
+	 * @param result
 	 * 
 	 * @return
 	 */
 	public static long insertAllowResult(OldTestResult result) {
-	    Util.log(TAG, "oldresultDatabaseManager insertTP");
+	    DswLog.i(TAG, "oldresultDatabaseManager insertTP");
 		return sResultHelper.insertAllowResult(result);
 
 	}
@@ -41,12 +39,11 @@ public class DbResultDatabaseManager {
 	/**
 	 * 删除特定的result记录
 	 * 
-	 * @param pkgName
-	 * @param perm
+	 * @param time
 	 * @return
 	 */
 	public static boolean deleteAllowResultByTime(String time) {
-	    Util.log(TAG, "ResultDatabaseManager deleteTPBytime");
+	    DswLog.i(TAG, "ResultDatabaseManager deleteTPBytime");
 		return sResultHelper.deleteAllowResultByTime(time);
 	}
 
@@ -56,7 +53,7 @@ public class DbResultDatabaseManager {
 	 * @return
 	 */
 	public static boolean deleteAllResult() {
-	    Util.log(TAG, "ResultDatabaseManager deleteAllTPException");
+	    DswLog.i(TAG, "ResultDatabaseManager deleteAllTPException");
 		return sResultHelper.deleteAllOldtestResult();
 	}
 
@@ -66,12 +63,12 @@ public class DbResultDatabaseManager {
 	 * @return
 	 */
 	public static List<OldTestResult> queryAllIResult() {
-	    Util.log(TAG, "ResultDatabaseManager queryAllissue");
+	    DswLog.i(TAG, "ResultDatabaseManager queryAllissue");
 		return sResultHelper.queryAllOldTestResult();
 	}
 
 	public static List<OldTestResult> queryResultBytesttime(String starttestTime) {
-		Util.log(TAG, "queryResultBytesttime starttestTime="+starttestTime);
+		DswLog.i(TAG, "queryResultBytesttime starttestTime="+starttestTime);
 		return sResultHelper.queryOldtestResultBytesttime(starttestTime);
 	}
 	

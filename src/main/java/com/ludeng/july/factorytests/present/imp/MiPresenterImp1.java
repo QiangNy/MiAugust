@@ -3,6 +3,7 @@ package com.ludeng.july.factorytests.present.imp;
 import android.os.SystemClock;
 import com.ludeng.july.factorytests.Task1Activity;
 import com.ludeng.july.factorytests.Utils.DswLog;
+import com.ludeng.july.factorytests.Utils.Singleton;
 import com.ludeng.july.factorytests.model.Pig;
 import com.ludeng.july.factorytests.model.imp.FactoryTaskImp;
 
@@ -78,6 +79,15 @@ public class MiPresenterImp1 implements MiContract.Presenter {
         }
     }
 
+    @Override
+    public void onDataInit() {
+
+
+        // set box1 content
+        String box1Content = "";
+
+    }
+
 
     @Override
     public void startGroup(final int group) {
@@ -94,6 +104,7 @@ public class MiPresenterImp1 implements MiContract.Presenter {
             mTimeTask = new MTimeTask(this);
             mTimer.schedule(mTimeTask,0);
         }
+
     }
 
     // 停止定时器

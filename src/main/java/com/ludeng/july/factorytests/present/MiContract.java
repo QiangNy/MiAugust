@@ -14,6 +14,8 @@ public interface MiContract {
 
         void onTimeOut(boolean isTimeOut);
 
+        void onDataInit();
+
     }
 
     interface View extends BaseView<Presenter> {
