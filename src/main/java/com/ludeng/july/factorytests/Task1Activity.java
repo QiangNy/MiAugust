@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.ludeng.july.R;
+import com.ludeng.july.factorytests.Utils.DswLog;
 import com.ludeng.july.factorytests.Utils.SPreference;
 import com.ludeng.july.factorytests.Utils.Singleton;
 import com.ludeng.july.factorytests.Utils.ToolsUtil;
@@ -30,7 +31,7 @@ public class Task1Activity extends Base2Activity implements MiContract.View, MiC
 
         runBtn= (Button) findViewById(R.id.runBtn);
         stopBtn= (Button) findViewById(R.id.stopBtn);
-        Singleton.getInstance().setmContext(getApplicationContext());
+
 
         runBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -39,7 +40,7 @@ public class Task1Activity extends Base2Activity implements MiContract.View, MiC
 
                 SPreference.putBoolean(getApplicationContext(),SPreference.OLDTEST_SPRE_TASKSTART,true);
 
-                ToolsUtil.setAlarm(getApplicationContext(), ToolsUtil.OLDTEST_ACTION_FINISHED, 0.5f);// 10 minutes
+                ToolsUtil.setAlarm(getApplicationContext(), ToolsUtil.OLDTEST_ACTION_FINISHED, 10);// 10 minutes
 
                 ArrayList arrayList = pig.getGroupsList();
                 arrayList.add(0);
@@ -91,21 +92,17 @@ public class Task1Activity extends Base2Activity implements MiContract.View, MiC
 
 
     @Override
-    public void stopFactoryTask() {
+    protected void onDestroy() {
+        super.onDestroy();
 
-    }
-
-    @Override
-    public void isTimeOut() {
-        if (mPresenter != null) {
-            mPresenter.onTimeOut(!SPreference.getBoolean(getApplicationContext(),SPreference.OLDTEST_SPRE_TASKSTART,false));
-        }
+        if (mi2BroadCast != null)
+            unregisterReceiver(mi2BroadCast);
     }
 
 
     @Override
-    public void refreshUI(Pig mPig) {
-
+    public void doFreshUI(Pig mPig) {
+        DswLog.i(TAG, "doFreshUI");
         this.pig = mPig;
 
         if (mPig.isFinishTest()) {
@@ -115,28 +112,27 @@ public class Task1Activity extends Base2Activity implements MiContract.View, MiC
                 mPresenter = null;
             }
 
-
             runBtn.setClickable(true);
         }
-        Log.i(TAG, "Task1Activity class  refreshUI is Tid"+ Thread.currentThread().getId());
 
     }
 
     @Override
-    public void showError() {
+    public void doFactoryTask() {
 
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        if (mi2BroadCast != null)
-            unregisterReceiver(mi2BroadCast);
+    public void doTimeOut() {
+        DswLog.i(TAG, "doTimeOut");
+        if (mPresenter != null) {
+            mPresenter.onTimeOut(!SPreference.getBoolean(getApplicationContext(),SPreference.OLDTEST_SPRE_TASKSTART,false));
+        }
     }
 
     @Override
-    public void onRecieve(String action) {
+    public void doRecieve(String action) {
+        DswLog.i(TAG, "doRecieve action="+action);
         if (ToolsUtil.OLDTEST_ACTION_FINISHED.equals(action)) {
             SPreference.clearSPreference(getApplicationContext());
             if (mPresenter != null) {

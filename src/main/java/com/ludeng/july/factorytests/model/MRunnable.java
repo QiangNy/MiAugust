@@ -13,7 +13,6 @@ import java.lang.ref.WeakReference;
 public class MRunnable extends AsyncTask {
 
 
-
     private WeakReference<FactoryTaskImp> weakReference;
 
     public String TAG = "MRunnable";
@@ -23,9 +22,6 @@ public class MRunnable extends AsyncTask {
     }
 
     private IUserPiz.task onLinstenner;
-
-    private BaseAsyncTask curretAsync;
-
 
 
     public MRunnable(FactoryTaskImp weakReference) {
@@ -37,7 +33,6 @@ public class MRunnable extends AsyncTask {
     @Override
     protected Object doInBackground(Object[] objects) {
 
-        Log.i(TAG, "MRunnable class doInBackground is Tid"+ Thread.currentThread().getId());
         if (weakReference.get() != null) {
             FactoryTaskImp view = weakReference.get();
 
@@ -55,7 +50,7 @@ public class MRunnable extends AsyncTask {
         super.onCancelled();
 
         //todo
-        onLinstenner.taskFinished(false);
+        onLinstenner.finishTask(false);
     }
 
 

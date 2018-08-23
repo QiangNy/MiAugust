@@ -1,8 +1,6 @@
 package com.ludeng.july.factorytests.present.imp;
 
 import android.os.SystemClock;
-import android.util.Log;
-
 import com.ludeng.july.factorytests.Task1Activity;
 import com.ludeng.july.factorytests.Utils.DswLog;
 import com.ludeng.july.factorytests.model.Pig;
@@ -18,7 +16,7 @@ import java.util.TimerTask;
 public class MiPresenterImp1 implements MiContract.Presenter {
     private FactoryTaskImp mModel;
     private WeakReference<MiContract.View> weakReference;
-    private final String TAG = "chenguang";
+    private final String TAG = "MiPresenterImp1";
     private Task1Activity mView;
     private Timer mTimer;
 
@@ -32,16 +30,16 @@ public class MiPresenterImp1 implements MiContract.Presenter {
         mModel = new FactoryTaskImp<>(this,mPig);
     }
 
+
     @Override
-    public void isDone(Pig pig) {
-        Log.i(TAG, "MiPresenterImp1 class is Tid"+ Thread.currentThread().getId());
+    public void onDone(Pig pig) {
 
         this.mPig = pig;
 
         //judge is timeout
         if (weakReference.get() != null) {
             mView = (Task1Activity) weakReference.get();
-            mView.isTimeOut();
+            mView.doTimeOut();
         }
     }
 
@@ -55,7 +53,7 @@ public class MiPresenterImp1 implements MiContract.Presenter {
 
     @Override
     public void onDestroy() {
-        mModel.onDestroy();
+        mModel.destroyTask();
         mModel = null;
         stopTimer();
     }
@@ -66,12 +64,12 @@ public class MiPresenterImp1 implements MiContract.Presenter {
         //timeout
         if (isTimeOut) {
             mPig.setTimeTaskStop(true);
-            DswLog.i(TAG, "time is out,finishi the task");
+            DswLog.i(TAG, "onTimeOut is true");
 
             //refresh UI
             if(weakReference.get() != null) {
                 Task1Activity mView = (Task1Activity) weakReference.get();
-                mView.refreshUI(this.mPig);
+                mView.doFreshUI(this.mPig);
                 //todo
             }
         }else {
@@ -123,15 +121,12 @@ public class MiPresenterImp1 implements MiContract.Presenter {
             }
 
             while (!mContext.mPig.isTimeTaskStop()) {
-                Log.i(mContext.TAG, "TimerTask class is Tid"+ Thread.currentThread().getId());
 
                 SystemClock.sleep(6000);
 
+                DswLog.i(mContext.TAG, "TimerTask onStopTask");
                 mContext.onStopTask(mContext.mPig);
             }
-
-            //if timeout the broadcast is coming
-            //refresh UI
         }
     }
 }

@@ -6,14 +6,14 @@ public interface IUserPiz{
         T getTaskName();
         void setTaskName(T var);
 
-        void taskFinished(boolean success);
+        void finishTask(boolean success);
 
-        void onDestroy();
+        void destroyTask();
     }
 
     interface taskListenner{
-        void onPause();
-        void onResume();
+        void onStart();
+        void onStop();
     }
 
 }

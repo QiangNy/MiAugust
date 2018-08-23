@@ -2,7 +2,6 @@ package com.ludeng.july.factorytests.model.imp;
 
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.ludeng.july.factorytests.Utils.DswLog;
 import com.ludeng.july.factorytests.Utils.Singleton;
@@ -75,11 +74,8 @@ public class FactoryTaskImp<T> implements IUserPiz.task<T> {
         this.mVar = var;
     }
 
-
-
     @Override
-    public void taskFinished(boolean isStop) {
-        Log.i(TAG, "FactoryTaskImp class finished is Tid"+ Thread.currentThread().getId());
+    public void finishTask(boolean success) {
         mRunnable.setOnLinstenner(null);
 
         isTaskStart = false;
@@ -87,13 +83,12 @@ public class FactoryTaskImp<T> implements IUserPiz.task<T> {
         if (weakReference.get() != null) {
             mPresenter = weakReference.get();
             taskPig.setModelTaskStop(true);
-            mPresenter.isDone(taskPig);
+            mPresenter.onDone(taskPig);
         }
-
     }
 
     @Override
-    public void onDestroy() {
+    public void destroyTask() {
         mRunnable = null;
         mPresenter = null;
         weakReference = null;

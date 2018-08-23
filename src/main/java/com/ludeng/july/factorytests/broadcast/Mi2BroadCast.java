@@ -38,7 +38,7 @@ public class Mi2BroadCast extends BroadcastReceiver {
     private void onCallBack(Context mContext,String action) {
         DswLog.i(TAG,"onCallBack "+action);
         if (weakReference.get() != null) {
-            weakReference.get().onRecieve(action);
+            weakReference.get().doRecieve(action);
         }
     }
 }

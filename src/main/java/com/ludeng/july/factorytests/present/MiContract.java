@@ -6,7 +6,7 @@ import com.ludeng.july.factorytests.view.BaseView;
 public interface MiContract {
     interface Presenter extends BasePresenter {
 
-        void isDone(Pig pig);
+        void onDone(Pig pig);
 
         void onStopTask(Pig pig);
 
@@ -18,17 +18,15 @@ public interface MiContract {
 
     interface View extends BaseView<Presenter> {
         //刷新界面
-        void refreshUI(Pig mPig);
-        //显示错误界面
-        void showError();
+        void doFreshUI(Pig mPig);
 
-        void stopFactoryTask();
+        void doFactoryTask();
 
-        void isTimeOut();
+        void doTimeOut();
     }
 
     interface RecieveListen {
-        void onRecieve(String action);
+        void doRecieve(String action);
     }
 
 }

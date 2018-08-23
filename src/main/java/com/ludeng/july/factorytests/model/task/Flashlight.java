@@ -44,15 +44,13 @@ public class Flashlight extends BaseAsyncTask {
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        //暂停
+    public void onStart() {
+
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        //开始
+    public void onStop() {
+
     }
 
 

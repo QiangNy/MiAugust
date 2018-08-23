@@ -26,18 +26,19 @@ public class BaseAsyncTask extends AsyncTask implements IUserPiz.taskListenner,M
         return null;
     }
 
+
     @Override
-    public void onPause() {
+    public void onStart() {
 
     }
 
     @Override
-    public void onResume() {
+    public void onStop() {
 
     }
 
     @Override
-    public void onRecieve(String action) {
+    public void doRecieve(String action) {
         //stop task
         if(ToolsUtil.OLDTEST_ACTION_STOPITEM.equals(action)) {
             cancel(true);
