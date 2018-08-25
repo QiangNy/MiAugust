@@ -12,8 +12,8 @@ public interface IUserPiz{
     }
 
     interface taskListenner{
-        void onStart();
-        void onStop();
+        void onStart(int clazID);
+        void onStop(int clazID);
     }
 
 }

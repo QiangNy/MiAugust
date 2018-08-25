@@ -5,9 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.SystemClock;
 
-import com.ludeng.july.factorytests.Utils.DswLog;
-import com.ludeng.july.factorytests.Utils.SPreference;
-import com.ludeng.july.factorytests.Utils.ToolsUtil;
+import com.ludeng.july.factorytests.utils.DswLog;
+import com.ludeng.july.factorytests.utils.SPreference;
+import com.ludeng.july.factorytests.utils.ToolsUtil;
 import com.ludeng.july.factorytests.model.Pig;
 
 public class MiBroadCast extends BroadcastReceiver{

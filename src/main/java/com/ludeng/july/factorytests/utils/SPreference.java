@@ -1,4 +1,4 @@
-package com.ludeng.july.factorytests.Utils;
+package com.ludeng.july.factorytests.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -17,7 +17,10 @@ public class SPreference {
     public static final String OLDTEST_SPRE_TASKSTART = "oldtest.spre.task.start";
     public static final String OLDTEST_SPRE_LOWPOSHUT = "oldtest.spre.lowpower.shutdown";
     public static final String OLDTEST_SPRE_USBPLUGTI = "oldtest.spre.usbplug.timeout";
+    public static final String OLDTEST_SPRE_CHARUSULT = "oldtest.spre.charge.result";
+
     private static final String OLDTEST_SPRE_FILENAMET = "oldtest.spre.filename";
+
 
 
 

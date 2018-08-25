@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.ludeng.july.R;
+import com.ludeng.july.factorytests.model.MiBatteryInfo;
 import com.ludeng.july.factorytests.model.Pig;
 import com.ludeng.july.factorytests.present.BasePresenter;
 import com.ludeng.july.factorytests.present.MiContract;
@@ -23,6 +24,5 @@ public class Base2Activity extends AppCompatActivity{
         setContentView(R.layout.activity_main2);
 
     }
-
 
 }

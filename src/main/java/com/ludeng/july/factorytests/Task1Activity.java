@@ -1,5 +1,6 @@
 package com.ludeng.july.factorytests;
 
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,11 +13,12 @@ import android.widget.CompoundButton;
 import android.widget.Spinner;
 
 import com.ludeng.july.R;
-import com.ludeng.july.factorytests.Utils.DswLog;
-import com.ludeng.july.factorytests.Utils.SPreference;
-import com.ludeng.july.factorytests.Utils.Singleton;
-import com.ludeng.july.factorytests.Utils.ToolsUtil;
+import com.ludeng.july.factorytests.utils.DswLog;
+import com.ludeng.july.factorytests.utils.SPreference;
+import com.ludeng.july.factorytests.utils.Singleton;
+import com.ludeng.july.factorytests.utils.ToolsUtil;
 import com.ludeng.july.factorytests.broadcast.Mi2BroadCast;
+import com.ludeng.july.factorytests.model.MiBatteryInfo;
 import com.ludeng.july.factorytests.model.Pig;
 import com.ludeng.july.factorytests.present.MiContract;
 import com.ludeng.july.factorytests.present.imp.MiPresenterImp1;
@@ -24,8 +26,8 @@ import com.ludeng.july.factorytests.present.imp.MiPresenterImp1;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Task1Activity extends Base2Activity implements MiContract.View, MiContract.RecieveListen,
-        CompoundButton.OnCheckedChangeListener,AdapterView.OnItemSelectedListener {
+public class Task1Activity extends Base2Activity implements MiContract.View, MiContract.RecieveListen<Pig>,
+        CompoundButton.OnCheckedChangeListener,AdapterView.OnItemSelectedListener,View.OnClickListener {
 
     private static final String TAG = "chenguang";
     private Button runBtn,stopBtn;
@@ -40,9 +42,7 @@ public class Task1Activity extends Base2Activity implements MiContract.View, MiC
         stopBtn= (Button) findViewById(R.id.stopBtn);
 
         mPresenter = new MiPresenterImp1(Task1Activity.this,pig);
-        Spinner mSpinner = null;
-
-        mSpinner.setOnItemSelectedListener(this);
+        mPresenter.onDataInit();
         runBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,15 +62,14 @@ public class Task1Activity extends Base2Activity implements MiContract.View, MiC
                 pig.setModelTaskStop(false);
                 pig.setTimeTaskStop(false);
 
-
-                StringBuffer sb = new StringBuffer();
-                sb.setLength(0);
                 Log.i(TAG, "the class is #1");
+
                 mPresenter.startGroup(1);
-                mPresenter.onDataInit();
 
-
-
+               /* Intent intent = new Intent();
+                intent.setClass(Task1Activity.this, CTaskActivity.class);
+                DswLog.i(TAG, "startActivityForResult CTaskActivity");
+                startActivityForResult(intent, ToolsUtil.REQUEST_CODE_CTASKACTIVITY);*/
             }
         });
 
@@ -96,6 +95,21 @@ public class Task1Activity extends Base2Activity implements MiContract.View, MiC
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ToolsUtil.OLDTEST_ACTION_FINISHED);
         registerReceiver(mi2BroadCast,intentFilter);
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == ToolsUtil.REQUEST_CODE_CTASKACTIVITY) {
+
+            SPreference.putBoolean(Singleton.getInstance().getmContext(),SPreference.OLDTEST_SPRE_CHARUSULT,
+                    resultCode == RESULT_OK);
+            onContinueTask(resultCode == RESULT_OK);
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void onContinueTask(boolean real) {
 
     }
 
@@ -144,8 +158,10 @@ public class Task1Activity extends Base2Activity implements MiContract.View, MiC
         }
     }
 
+
+
     @Override
-    public void doRecieve(String action) {
+    public void doRecieve(String action, Pig var) {
         DswLog.i(TAG, "doRecieve action="+action);
         if (ToolsUtil.OLDTEST_ACTION_FINISHED.equals(action)) {
             SPreference.clearSPreference(getApplicationContext());
@@ -174,4 +190,8 @@ public class Task1Activity extends Base2Activity implements MiContract.View, MiC
 
     }
 
+    @Override
+    public void onClick(View v) {
+
+    }
 }

@@ -2,7 +2,7 @@ package com.ludeng.july.factorytests.model.dbdata;
 
 import android.content.Context;
 
-import com.ludeng.july.factorytests.Utils.DswLog;
+import com.ludeng.july.factorytests.utils.DswLog;
 
 import java.util.ArrayList;
 import java.util.List;

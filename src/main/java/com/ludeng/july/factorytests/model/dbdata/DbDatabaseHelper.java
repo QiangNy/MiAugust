@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.ludeng.july.factorytests.Utils.DswLog;
+import com.ludeng.july.factorytests.utils.DswLog;
 
 import java.util.ArrayList;
 import java.util.List;

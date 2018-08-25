@@ -2,7 +2,7 @@ package com.ludeng.july;
 
 import android.app.Application;
 
-import com.ludeng.july.factorytests.Utils.Singleton;
+import com.ludeng.july.factorytests.utils.Singleton;
 import com.squareup.leakcanary.LeakCanary;
 
 public class MApplication extends Application {

@@ -2,8 +2,8 @@ package com.ludeng.july.factorytests.present.imp;
 
 import android.os.SystemClock;
 import com.ludeng.july.factorytests.Task1Activity;
-import com.ludeng.july.factorytests.Utils.DswLog;
-import com.ludeng.july.factorytests.Utils.Singleton;
+import com.ludeng.july.factorytests.utils.DswLog;
+import com.ludeng.july.factorytests.utils.Singleton;
 import com.ludeng.july.factorytests.model.Pig;
 import com.ludeng.july.factorytests.model.imp.FactoryTaskImp;
 

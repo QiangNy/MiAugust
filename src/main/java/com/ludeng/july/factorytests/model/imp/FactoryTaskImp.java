@@ -3,13 +3,12 @@ package com.ludeng.july.factorytests.model.imp;
 import android.content.Intent;
 import android.os.AsyncTask;
 
-import com.ludeng.july.factorytests.Utils.DswLog;
-import com.ludeng.july.factorytests.Utils.Singleton;
-import com.ludeng.july.factorytests.Utils.ToolsUtil;
+import com.ludeng.july.factorytests.utils.DswLog;
+import com.ludeng.july.factorytests.utils.Singleton;
+import com.ludeng.july.factorytests.utils.ToolsUtil;
 import com.ludeng.july.factorytests.model.IUserPiz;
-import com.ludeng.july.factorytests.model.MRunnable;
 import com.ludeng.july.factorytests.model.Pig;
-import com.ludeng.july.factorytests.model.task.DBAsyncTask;
+import com.ludeng.july.factorytests.model.task.TaskManager;
 import com.ludeng.july.factorytests.present.MiContract;
 
 import java.lang.ref.WeakReference;
@@ -22,14 +21,13 @@ public class FactoryTaskImp<T> implements IUserPiz.task<T> {
     private boolean isTaskStart = false;
     private WeakReference<MiContract.Presenter> weakReference;
     private MiContract.Presenter mPresenter;
-    private MRunnable mRunnable;
+    private TaskManager taskManager;
 
     public Pig getTaskPig() {
         return taskPig;
     }
 
     private Pig taskPig;
-
 
 
     public FactoryTaskImp(MiContract.Presenter mPresenter, T mVar) {
@@ -47,20 +45,20 @@ public class FactoryTaskImp<T> implements IUserPiz.task<T> {
         }
         taskPig = pig;
         DswLog.i(TAG, "FactoryTaskImp class start is Tid"+ Thread.currentThread().getId());
-        mRunnable = new MRunnable(FactoryTaskImp.this);
-        mRunnable.setOnLinstenner(this);
-        mRunnable.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+        if (taskManager == null) {
+            taskManager = new TaskManager();
+            taskManager.setOnLinstenner(this);
+        }
+
+        taskManager.startTask(pig);
         isTaskStart = true;
-
-        final DBAsyncTask dbAsyncTask = new DBAsyncTask();
-        dbAsyncTask.execute(AsyncTask.THREAD_POOL_EXECUTOR);
-
     }
 
     @Override
     public void stop(Pig mPig) {
-        if (mRunnable != null)
-            mRunnable.cancel(true);
+      /*  if (taskManager != null)
+            taskManager.cancelled();*/
 
         DswLog.i(TAG,"sendbroad OLDTEST_ACTION_STOPITEM");
         Singleton.getInstance().getmContext().sendBroadcast(new Intent(ToolsUtil.OLDTEST_ACTION_STOPITEM));
@@ -81,7 +79,6 @@ public class FactoryTaskImp<T> implements IUserPiz.task<T> {
 
     @Override
     public void finishTask(boolean success) {
-        mRunnable.setOnLinstenner(null);
 
         isTaskStart = false;
 
@@ -94,7 +91,8 @@ public class FactoryTaskImp<T> implements IUserPiz.task<T> {
 
     @Override
     public void destroyTask() {
-        mRunnable = null;
+        taskManager.setOnLinstenner(null);
+        taskManager = null;
         mPresenter = null;
         weakReference = null;
         DswLog.i(TAG,"model clear");

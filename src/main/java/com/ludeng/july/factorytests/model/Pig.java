@@ -13,6 +13,16 @@ public class Pig {
     private String box1,box2,box3,box4,box5;
     private boolean isNVRAM_FAC_FLAG;
 
+    private boolean isTaskStart;
+
+    public boolean isTaskStart() {
+        return isTaskStart;
+    }
+
+    public void setTaskStart(boolean taskStart) {
+        isTaskStart = taskStart;
+    }
+
     public boolean isNVRAM_FAC_FLAG() {
         return isNVRAM_FAC_FLAG;
     }

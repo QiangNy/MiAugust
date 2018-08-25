@@ -4,15 +4,16 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 
-import com.ludeng.july.factorytests.Utils.DswLog;
-import com.ludeng.july.factorytests.Utils.Singleton;
+import com.ludeng.july.factorytests.utils.DswLog;
+import com.ludeng.july.factorytests.utils.Singleton;
 import com.ludeng.july.factorytests.model.dbdata.DbDatabaseManager;
 import com.ludeng.july.factorytests.model.dbdata.DbResultDatabaseManager;
 
 import static android.support.constraint.Constraints.TAG;
 
-public class DBAsyncTask extends BaseAsyncTask {
+public class DBAsyncTask extends AsyncTask {
 
 
 

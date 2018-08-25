@@ -1,4 +1,4 @@
-package com.ludeng.july.factorytests.Utils;
+package com.ludeng.july.factorytests.utils;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -78,7 +78,7 @@ public class DswLog {
     
     private static void log(String tag, String msg, char level) {
         if (LOG_SWITCH) {
-            msg = "factest " + msg;
+            msg = "cyfactory " + msg;
             if ('i' == level) {
                 Log.i(tag, msg );
             } else if ('e' == level) {

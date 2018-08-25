@@ -1,4 +1,4 @@
-package com.ludeng.july.factorytests.Utils;
+package com.ludeng.july.factorytests.utils;
 
 import android.content.Context;
 
